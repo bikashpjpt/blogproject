@@ -6,15 +6,15 @@ from django.urls import reverse
 # Create your models here.
 
 class Post(models.Model):
-    author = models.ForeignKey('auth.User')
-    title = models.models.CharField(max_length=50)
+    author = models.ForeignKey('auth.User',on_delete=models.CASCADE,)
+    title = models.CharField(max_length=50)
     text = models.TextField()
-    create_date = models.models.DateTimeField(default=timezone.now())
+    created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True,null=True)
 
     def publish(self):
         self.published_date = timezone.now()
-        self.save
+        self.save()
 
     def approve_comments(self):
         return self.comments.filter(approved_comment=True)
@@ -27,10 +27,10 @@ class Post(models.Model):
         return self.title
 
 class Comment(models.Model):
-    post = models.ForeignKey('blog.Post', related_name='comments')
+    post = models.ForeignKey('blog.Post', related_name='comments',on_delete=models.CASCADE,)
     author = models.CharField(max_length=50)
     text = models.TextField()
-    create_date = models.DateTimeField(default=timezone.now())
+    created_date = models.DateTimeField(default=timezone.now())
     approved_comment = models.BooleanField(default=False)
 
     def approve(self):
